@@ -1,42 +1,72 @@
+
+
 "use client";
-
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
-import { StepCard } from "./components/stepper";
-import { Stepper } from "./components/card";
+import { toast } from "sonner";
 
-export default function Home() {
-  const [step, setStep] = useState<number>(1);
-  const [value, setvalue] = useState<string>("")
-
-  console.log
-
-  const handleNextStep = () => {
-    if (step === 3) return;
-    setStep(step + 1);
+const SingInPage = () => {
+  const user = {
+    email: "Tergel@gmail.com",
+    password: "hell@1234",
   };
 
-  const handlePrevStep = () => {
-    if (step === 1) return;
-    setStep(step - 1);
-  };
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const onChange = (event)=>{
-    setvalue(event.target.value)
-  }
+  const handleSignin = () => {
+    if(user.email === email && user.password === password){
+      toast.success("YOU ARE SIGNED IN!");
+    }else{
+      toast.error("Invalid credential!");
+    }
+  };
 
   return (
-    <div className="mx-auto w-screen h-screen flex flex-col justify-center items-center gap-4">
-      <div>
-        <Stepper step={step} />
-        <StepCard step={step} />
-      </div>
-
-      <input value={value} onChange={onChange}/>
-
-      <div className="flex gap-2 mt-4">
-        {step !== 1 && <button onClick={handlePrevStep}><div className="w-{20px}, h-{20px} border border-solid border-black">Prev</div></button>}
-        {step !== 3 && <button onClick={handleNextStep}>Next</button>}
-      </div>
+    <div className="w-full h-screen flex justify-center items-center">
+      <Card>
+        <CardHeader>
+          <CardTitle>Signin</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-4">
+            <Input
+              placeholder="Enter your email..."
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <div className="relative">
+              <Input
+                placeholder="Password..."
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                type={passwordShown ? "text" : "password"}
+              />
+              <Button
+                onClick={() => {
+                  setPasswordShown(!passwordShown);
+                }}
+                variant="ghost"
+                className="absolute right-0 top-0"
+              >
+                {passwordShown ? <Eye /> : <EyeClosed />}
+              </Button>
+            </div>
+            <Button onClick={handleSignin}>Sign in</Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
-}
+};
+
+export default SingInPage;
+
